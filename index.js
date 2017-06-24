@@ -93,8 +93,11 @@ class FloatLabelTextField extends Component {
   }
 
   render() {
+    const { height, style, ...otherProps } = this.props
+    const containerHeight = height || (style && style.height) || 45;
+    const textFieldHeight = containerHeight;  // TODO: check on ios
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, {height: containerHeight}]}>
         <View style={styles.viewContainer}>
           <View style={styles.paddingView} />
           <View style={[styles.fieldContainer, this.withBorder()]}>
@@ -102,10 +105,10 @@ class FloatLabelTextField extends Component {
               <Text style={[styles.fieldLabel, this.labelStyle()]}>{this.placeholderValue()}</Text>
             </FloatingLabel>
             <TextFieldHolder withValue={this.state.text}>
-              <TextInput {...this.props}
+              <TextInput {...otherProps}
                 ref='input'
                 underlineColorAndroid="transparent"
-                style={[styles.valueText]}
+                style={[styles.valueText, style, {height: textFieldHeight}]}
                 defaultValue={this.props.defaultValue}
                 value={this.state.text}
                 maxLength={this.props.maxLength}
@@ -183,7 +186,7 @@ class FloatLabelTextField extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    height: 45,
+    height: 60,
     backgroundColor: 'white',
     justifyContent: 'center'
   },
@@ -197,7 +200,10 @@ const styles = StyleSheet.create({
   floatingLabel: {
     position: 'absolute',
     top: 0,
-    left: 0
+    left: 0,
+    right: 0,
+    backgroundColor: 'white',
+    zIndex: 1,
   },
   fieldLabel: {
     height: 15,
