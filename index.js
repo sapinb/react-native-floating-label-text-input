@@ -93,31 +93,40 @@ class FloatLabelTextField extends Component {
   }
 
   render() {
-    const { height, style, ...otherProps } = this.props
+    const {
+      height,
+      style,
+      padding = { left: 15 }, // default left: 15 padding as original
+      ...otherProps,
+    } = this.props;
     const containerHeight = height || (style && style.height) || 45;
     const textFieldHeight = containerHeight;  // TODO: check on ios
+
+    const containerStyle = {
+      height: containerHeight,
+      paddingLeft: (padding === true && 15) || (padding && padding.left) || 0,
+      paddingRight: (padding === true && 15) || (padding && padding.right) || 0
+    };
+
     return (
-      <View style={[styles.container, {height: containerHeight}]}>
-        <View style={styles.viewContainer}>
-          <View style={styles.paddingView} />
-          <View style={[styles.fieldContainer, this.withBorder()]}>
-            <FloatingLabel visible={this.state.text}>
-              <Text style={[styles.fieldLabel, this.labelStyle()]}>{this.placeholderValue()}</Text>
-            </FloatingLabel>
-            <TextFieldHolder withValue={this.state.text}>
-              <TextInput {...otherProps}
-                ref='input'
-                underlineColorAndroid="transparent"
-                style={[styles.valueText, style, {height: textFieldHeight}]}
-                defaultValue={this.props.defaultValue}
-                value={this.state.text}
-                maxLength={this.props.maxLength}
-                onFocus={() => this.setFocus()}
-                onBlur={() => this.unsetFocus()}
-                onChangeText={(value) => this.setText(value)}
-                />
-            </TextFieldHolder>
-          </View>
+      <View style={[styles.container, containerStyle]}>
+        <View style={[styles.fieldContainer, this.withBorder()]}>
+          <FloatingLabel visible={this.state.text}>
+            <Text style={[styles.fieldLabel, this.labelStyle()]}>{this.placeholderValue()}</Text>
+          </FloatingLabel>
+          <TextFieldHolder withValue={this.state.text}>
+            <TextInput {...otherProps}
+              ref='input'
+              underlineColorAndroid="transparent"
+              style={[styles.valueText, style, {height: textFieldHeight}]}
+              defaultValue={this.props.defaultValue}
+              value={this.state.text}
+              maxLength={this.props.maxLength}
+              onFocus={() => this.setFocus()}
+              onBlur={() => this.unsetFocus()}
+              onChangeText={(value) => this.setText(value)}
+              />
+          </TextFieldHolder>
         </View>
       </View>
     );
@@ -188,14 +197,6 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 60,
     backgroundColor: 'white',
-    justifyContent: 'center'
-  },
-  viewContainer: {
-    flex: 1,
-    flexDirection: 'row'
-  },
-  paddingView: {
-    width: 15
   },
   floatingLabel: {
     position: 'absolute',
@@ -208,7 +209,8 @@ const styles = StyleSheet.create({
   fieldLabel: {
     height: 15,
     fontSize: 10,
-    color: '#B1B1B1'
+    color: '#B1B1B1',
+    paddingLeft: 1,
   },
   fieldContainer: {
     flex: 1,
