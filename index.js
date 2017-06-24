@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
     position: 'relative'
   },
   withBorder: {
-    borderBottomWidth: 1 / 2,
+    borderBottomWidth: StyleSheet.hairlineWidth,
     borderColor: '#C8C7CC',
   },
   valueText: {
